@@ -15,6 +15,7 @@ export default class TodoStore {
       todos: observable,
       addTodo: action,
       toggleTodo: action,
+      deleteTodo: action,
       status: computed,
     });
   }
@@ -28,6 +29,10 @@ export default class TodoStore {
     this.todos.push(item);
   }
 
+  deleteTodo(id: string) {
+    this.todos = this.todos.filter((item) => item.id !== id);
+  }
+
   toggleTodo(id: string) {
     const index = this.todos.findIndex((item) => item.id === id);
     if (index > -1) {
@@ -36,15 +41,9 @@ export default class TodoStore {
   }
 
   get status() {
-    let completed = 0,
-      remaining = 0;
-    this.todos.forEach((todo) => {
-      if (todo.completed) {
-        completed++;
-      } else {
-        remaining++;
-      }
-    });
-    return { completed, remaining };
+    let total = this.todos.length;
+    let completed = this.todos.filter((todo) => todo.completed).length;
+    let remaining = this.todos.filter((todo) => !todo.completed).length;
+    return { total, completed, remaining };
   }
 }

@@ -21,12 +21,18 @@ const TodoList: React.FC<TodoListProps> = observer(({ todoStore }) => {
 
   return (
     <>
+      <div>total: {todoStore.status.total}</div>
       <div>Completed: {todoStore.status.completed}</div>
       <div>Remaining: {todoStore.status.remaining}</div>
       <ul>
         {todoStore.todos.map((todo) => (
-          <li key={todo.id} onClick={() => todoStore.toggleTodo(todo.id)}>
-            {todo.title} [{todo.completed ? "x" : ""}]
+          <li key={todo.id}>
+            <input
+              type="checkbox"
+              onChange={() => todoStore.toggleTodo(todo.id)}
+            ></input>
+            <label>{todo.title}</label>
+            <button onClick={() => todoStore.deleteTodo(todo.id)}>x</button>
           </li>
         ))}
       </ul>
