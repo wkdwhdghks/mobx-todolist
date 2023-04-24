@@ -4,11 +4,7 @@ import TodoList from "./TodoList";
 function App() {
   const todoStore = new TodoStore();
 
-  return (
-    <div>
-      <TodoList todoStore={todoStore} />
-    </div>
-  );
+  return <TodoList todoStore={todoStore} />;
 }
 
 export default App;

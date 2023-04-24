@@ -1,6 +1,8 @@
 import { useState } from "react";
 import TodoStore from "./TodoStore";
 import { observer } from "mobx-react";
+import { FaTrashAlt } from "react-icons/fa";
+import style from "./TodoList.module.css";
 
 interface TodoListProps {
   todoStore: TodoStore;
@@ -15,33 +17,53 @@ const TodoList: React.FC<TodoListProps> = observer(({ todoStore }) => {
 
   const handleClick = (e: React.FormEvent) => {
     e.preventDefault();
-    todoStore.addTodo(value);
-    setValue("");
+    if (value.length > 0) {
+      todoStore.addTodo(value);
+      setValue("");
+    }
   };
 
   return (
-    <>
-      <div>total: {todoStore.status.total}</div>
-      <div>Completed: {todoStore.status.completed}</div>
-      <div>Remaining: {todoStore.status.remaining}</div>
-      <ul>
+    <div className={style.container}>
+      <div className={style.status}>
+        <div>total: {todoStore.status.total}</div>
+        <div>Completed: {todoStore.status.completed}</div>
+        <div>Remaining: {todoStore.status.remaining}</div>
+      </div>
+
+      <form className={style.form}>
+        <input
+          value={value}
+          placeholder="Add Todo..."
+          onChange={handleChange}
+          className={style.input}
+        ></input>
+        <button onClick={handleClick} className={style.button}>
+          Submit
+        </button>
+      </form>
+
+      <ul className={style.ul}>
         {todoStore.todos.map((todo) => (
-          <li key={todo.id}>
+          <li key={todo.id} className={style.li}>
             <input
               type="checkbox"
               onChange={() => todoStore.toggleTodo(todo.id)}
+              className={style.input}
             ></input>
-            <label>{todo.title}</label>
-            <button onClick={() => todoStore.deleteTodo(todo.id)}>x</button>
+            <label className={style.label}>{todo.title}</label>
+            <div
+              className={style.div}
+              onClick={() => todoStore.deleteTodo(todo.id)}
+            >
+              <p className={style.p}>
+                <FaTrashAlt />
+              </p>
+            </div>
           </li>
         ))}
       </ul>
-
-      <form>
-        <input value={value} onChange={handleChange}></input>
-        <button onClick={handleClick}>확인</button>
-      </form>
-    </>
+    </div>
   );
 });
 
